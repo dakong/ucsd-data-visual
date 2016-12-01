@@ -19,19 +19,27 @@ const randomDataSet = () => {
   return Array.apply(null, {length: numDataPoints}).map(()=>[randomX(), randomY(), randomSize(), randomHue()]);
 }
 
+const calculateStandardDeviation = (dataSet) => {
+  const dataSetLength = dataSet.length;
+  var mean = dataSet.reduce((a,b) => (a + b.enroll), 0);
+  var stdDev = Math.sqrt(dataSet.reduce((a,b) => (a + Math.sqrt(Math.abs(b.enroll - mean))),0)/dataSetLength);
+  return stdDev;
+}
+
 export default class Chart extends Component {
   constructor(props){
     super(props);
     this.state = {
-      data : randomDataSet(),
       capeData : null,
       dropDownOptions: [
       ],
-      currentSubject: 'ANAR'
+      currentSubject: 'ANAR',
+      toggleSize: 'on'
     }
     this.searchSubject = this.searchSubject.bind(this);
     this.returnFromSearch = this.returnFromSearch.bind(this);
     this.selectSubject = this.selectSubject.bind(this);
+    this.toggleSize = this.toggleSize.bind(this);
   }
 
   returnFromSearch (result){
@@ -42,6 +50,10 @@ export default class Chart extends Component {
     this.setState({
       capeData: resultWithRndmColor
     })
+
+    var stddev = calculateStandardDeviation(result);
+    //console.log('standard deviation ', stddev);
+
   }
 
   searchSubject (subject){
@@ -64,8 +76,17 @@ export default class Chart extends Component {
   overView(){
     Query.searchAllSubjects(this.returnFromSearch);
     this.setState({
-      currentSubject: 'All'
+      currentSubject: 'all subjects'
     })
+  }
+
+  toggleSize(){
+    if(this.state.toggleSize === 'on'){
+      this.setState({toggleSize: 'off'});
+    } else{
+
+      this.setState({toggleSize: 'on'});
+    }
   }
 
   componentDidMount(){
@@ -75,17 +96,18 @@ export default class Chart extends Component {
 
   render() {
     const chart = this.state.capeData !== null ? ( <ScatterPlot {...this.state} {...styles}/>) : null;
-
     const dropDownOptions = this.state.dropDownOptions.map((courses, index) => (
       <option value={courses} key={index}>{courses}</option>
-    ))
-    return (<div>
-        <h1> Results for {this.state.currentSubject} </h1>
+    ));
+
+    return (<div id="chart-container">
+        <h1 id="chart-title"> Results for {this.state.currentSubject} </h1>
           <div className='control'>
-            <select style={{display:'inline'}} onChange={(event)=>this.selectSubject(event)}>
+            <label>Show enroll size&nbsp;<input type="checkbox" onClick={()=>this.toggleSize()} /></label> <br />
+            <select onChange={(event)=>this.selectSubject(event)}>
               {dropDownOptions}
-            </select>
-            <button style={{display:'inline'}} onClick={()=>this.overView()}>All Subjects</button>
+            </select> <br />
+            <button onClick={()=>this.overView()}>All Subjects</button> <br />
           </div>
         {chart}
       </div>)

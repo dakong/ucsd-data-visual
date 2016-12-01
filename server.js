@@ -16,7 +16,7 @@ app.get('/api/getCourses/:subject', (req,res)=>{
   const subject = req.params.subject;
   var result = [];
 
-  var statement = db.prepare('SELECT AVG(enroll) as enroll, subject, course, studyHoursPerWeek, AVG(avgGPAReceived) as avgGPAReceived, AVG(avgGPAExpected) as avgGPAExpected '
+  var statement = db.prepare('SELECT AVG(enroll) as enroll, subject, course, AVG(studyHoursPerWeek) as studyHoursPerWeek, AVG(avgGPAReceived) as avgGPAReceived, AVG(avgGPAExpected) as avgGPAExpected '
     + 'FROM ucsdcape '
     + 'WHERE cast(avgGPAReceived as integer) != 0 AND subject = :subjectVal '
     + 'GROUP BY subject, course ORDER BY subject ASC, course ASC');
