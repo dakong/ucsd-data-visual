@@ -25,6 +25,7 @@ export default class Axis extends Component {
         .attr("font-weight", 600)
         .attr("dy", ".75em")
         .attr("transform", "rotate(-90)")
+        .attr("fill", "#4982c3")
         .text("GPA");
     }
     else{
@@ -35,6 +36,7 @@ export default class Axis extends Component {
         .attr("x", 450)
         .attr("font-weight", 600)
         .attr("dx", ".75em")
+        .attr("fill", "#4982c3")
         .text("Hours spent studying");
     }
     console.log(node);

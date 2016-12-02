@@ -1,18 +1,28 @@
 import React, { Component } from 'react';
 
 const circleRadius = 8;
+const roundTenth = (num) => {
+  return Math.round(num*100)/100;
+}
+const roundWhole = (num) => {
+  return Math.round(num);
+}
 const renderCircles = (props) => {
+
   return (coords, index) => {
+
     const courseTitle = coords['course'] === undefined ? coords['subject'] : coords['subject'] + ' ' +  coords['course'];
     const radius = props.toggleSize ? coords['enroll']/circleRadius : circleRadius;
+
     const circleProps = {
-      cx     : props.xScale(coords['studyHoursPerWeek']),
-      cy     : props.yScale(coords['avgGPAReceived']),
-      r      : radius,
-      fill   : coords['color'],
-      title  : courseTitle,
-      cursor : 'pointer',
-      key    : index
+      cx            : roundTenth(props.xScale(coords['studyHoursPerWeek'])),
+      cy            : roundTenth(props.yScale(coords['avgGPAReceived'])),
+      r             : roundTenth(radius),
+      fill          : coords['color'],
+      title         : courseTitle,
+      cursor        : 'pointer',
+      "data-enroll" : roundWhole(coords['enroll']),
+      key           : index
     };
     return <circle {...circleProps} />;
   }

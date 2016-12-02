@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import ScatterPlot from './ScatterPlot';
-import '../css/ScatterPlot.css';
+import Footer from './Footer';
 import Query from '../API/SearchApi';
+import '../css/ScatterPlot.css';
 
 const numDataPoints = 25;
 const styles = {
@@ -9,22 +10,7 @@ const styles = {
   height: 500,
   padding: 50
 }
-const randomX = () => Math.round(10 * (Math.random() * 30))/10;
-const randomY = () => Math.round(10 * (Math.random() * 4))/10;
-const randomSize = () => 100 + Math.floor(Math.random() * 300);
 const randomHue = () => 'rgba(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) +',.6)';
-
-//TODO Change to an array of objects, and make coordinates an array
-const randomDataSet = () => {
-  return Array.apply(null, {length: numDataPoints}).map(()=>[randomX(), randomY(), randomSize(), randomHue()]);
-}
-
-// const calculateStandardDeviation = (dataSet) => {
-//   const dataSetLength = dataSet.length;
-//   var mean = dataSet.reduce((a,b) => (a + b.enroll), 0);
-//   var stdDev = Math.sqrt(dataSet.reduce((a,b) => (a + Math.sqrt(Math.abs(b.enroll - mean))),0)/dataSetLength);
-//   return stdDev;
-// }
 
 export default class Chart extends Component {
   constructor(props){
@@ -69,12 +55,6 @@ export default class Chart extends Component {
     }
   }
 
-  randomizeDataSet(){
-    this.setState({
-      data: randomDataSet()
-    })
-  }
-
   overView(){
     Query.searchAllSubjects(this.returnFromSearch);
     this.setState({
@@ -90,7 +70,6 @@ export default class Chart extends Component {
 
   componentDidMount(){
     Query.getSubjectList((result)=>{this.setState({dropDownOptions: result})});
-    //Query.search(this.state.currentSubject, this.returnFromSearch);
     this.overView();
   }
 
@@ -99,8 +78,8 @@ export default class Chart extends Component {
     const dropDownOptions = this.state.dropDownOptions.map((courses, index) => (
       <option value={courses} key={index}>{courses}</option>
     ));
-
-    return (<div id="chart-container">
+    return (<div id="page-container">
+      <div id="chart-container">
         <h1 id="chart-title"> Results for {this.state.currentSubject} </h1>
           <div className='control'>
             <label><input type="checkbox" onChange={(event)=>this.toggleSize(event)} checked={this.state.toggleSize}/>&nbsp;Show enrollment size</label><br />
@@ -110,6 +89,8 @@ export default class Chart extends Component {
             </select> <br />
           </div>
         {chart}
-      </div>)
+      </div>
+      <Footer />
+    </div>)
   }
 }
