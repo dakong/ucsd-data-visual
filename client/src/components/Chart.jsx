@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import ScatterPlot from './ScatterPlot';
-import './ScatterPlot.css';
-import Query from './SearchApi';
+import '../css/ScatterPlot.css';
+import Query from '../API/SearchApi';
 
 const numDataPoints = 25;
 const styles = {
   width: 750,
   height: 500,
-  padding: 30
+  padding: 50
 }
 const randomX = () => Math.round(10 * (Math.random() * 30))/10;
 const randomY = () => Math.round(10 * (Math.random() * 4))/10;
@@ -19,12 +19,12 @@ const randomDataSet = () => {
   return Array.apply(null, {length: numDataPoints}).map(()=>[randomX(), randomY(), randomSize(), randomHue()]);
 }
 
-const calculateStandardDeviation = (dataSet) => {
-  const dataSetLength = dataSet.length;
-  var mean = dataSet.reduce((a,b) => (a + b.enroll), 0);
-  var stdDev = Math.sqrt(dataSet.reduce((a,b) => (a + Math.sqrt(Math.abs(b.enroll - mean))),0)/dataSetLength);
-  return stdDev;
-}
+// const calculateStandardDeviation = (dataSet) => {
+//   const dataSetLength = dataSet.length;
+//   var mean = dataSet.reduce((a,b) => (a + b.enroll), 0);
+//   var stdDev = Math.sqrt(dataSet.reduce((a,b) => (a + Math.sqrt(Math.abs(b.enroll - mean))),0)/dataSetLength);
+//   return stdDev;
+// }
 
 export default class Chart extends Component {
   constructor(props){
@@ -33,8 +33,8 @@ export default class Chart extends Component {
       capeData : null,
       dropDownOptions: [
       ],
-      currentSubject: 'ANAR',
-      toggleSize: 'on'
+      currentSubject: 'all subjects',
+      toggleSize: true
     }
     this.searchSubject = this.searchSubject.bind(this);
     this.returnFromSearch = this.returnFromSearch.bind(this);
@@ -50,10 +50,6 @@ export default class Chart extends Component {
     this.setState({
       capeData: resultWithRndmColor
     })
-
-    var stddev = calculateStandardDeviation(result);
-    //console.log('standard deviation ', stddev);
-
   }
 
   searchSubject (subject){
@@ -61,10 +57,16 @@ export default class Chart extends Component {
   }
 
   selectSubject(event){
-    this.searchSubject(event.target.value);
-    this.setState({
-      currentSubject: event.target.value
-    });
+    const option = event.target.value;
+    if(option != 'all'){
+      this.searchSubject(event.target.value);
+      this.setState({
+        currentSubject: event.target.value
+      });
+    }
+    else{
+      this.overView();
+    }
   }
 
   randomizeDataSet(){
@@ -80,18 +82,16 @@ export default class Chart extends Component {
     })
   }
 
-  toggleSize(){
-    if(this.state.toggleSize === 'on'){
-      this.setState({toggleSize: 'off'});
-    } else{
-
-      this.setState({toggleSize: 'on'});
-    }
+  toggleSize(event){
+    this.setState({
+      toggleSize : event.target.checked
+    });
   }
 
   componentDidMount(){
-    Query.getSubjectList((result)=>{this.setState({dropDownOptions: result, currentSubject:result[0]})});
-    Query.search(this.state.currentSubject, this.returnFromSearch);
+    Query.getSubjectList((result)=>{this.setState({dropDownOptions: result})});
+    //Query.search(this.state.currentSubject, this.returnFromSearch);
+    this.overView();
   }
 
   render() {
@@ -103,11 +103,11 @@ export default class Chart extends Component {
     return (<div id="chart-container">
         <h1 id="chart-title"> Results for {this.state.currentSubject} </h1>
           <div className='control'>
-            <label>Show enroll size&nbsp;<input type="checkbox" onClick={()=>this.toggleSize()} /></label> <br />
+            <label><input type="checkbox" onChange={(event)=>this.toggleSize(event)} checked={this.state.toggleSize}/>&nbsp;Show enrollment size</label><br />
             <select onChange={(event)=>this.selectSubject(event)}>
+              <option value="all" key ="0">All Subjects</option>
               {dropDownOptions}
             </select> <br />
-            <button onClick={()=>this.overView()}>All Subjects</button> <br />
           </div>
         {chart}
       </div>)

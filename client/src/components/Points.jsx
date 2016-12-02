@@ -4,7 +4,7 @@ const circleRadius = 8;
 const renderCircles = (props) => {
   return (coords, index) => {
     const courseTitle = coords['course'] === undefined ? coords['subject'] : coords['subject'] + ' ' +  coords['course'];
-    const radius = props.toggleSize === 'on' ? coords['enroll']/circleRadius : circleRadius;
+    const radius = props.toggleSize ? coords['enroll']/circleRadius : circleRadius;
     const circleProps = {
       cx     : props.xScale(coords['studyHoursPerWeek']),
       cy     : props.yScale(coords['avgGPAReceived']),

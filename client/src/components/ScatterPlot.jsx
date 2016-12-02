@@ -12,7 +12,7 @@ const xMin = (data) => {return (d3.min(data, (d)=>d['studyHoursPerWeek']));}
 const yMax = (data) => {return (d3.max(data, (d)=>d['avgGPAReceived']));}
 const yMin = (data) => {return (d3.min(data, (d)=>d['avgGPAReceived']));}
 const xScale = (props) => {
-  return d3.scaleLinear().domain([Math.floor(xMin(props.capeData)), Math.ceil(xMax(props.capeData))]).range([props.padding, props.width - props.padding]);
+  return d3.scaleLinear().domain([Math.floor(xMin(props.capeData)), Math.ceil(xMax(props.capeData))]).range([props.padding, props.width - props.padding*2]);
 }
 const yScale = (props) => {
   return d3.scaleLinear().domain([Math.floor(yMin(props.capeData)), Math.ceil(yMax(props.capeData))]).range([props.height - props.padding, props.padding]);
