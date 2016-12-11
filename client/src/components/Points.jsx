@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-const circleRadius = 8;
 const roundTenth = (num) => {
   return Math.round(num*100)/100;
 }
@@ -12,7 +11,7 @@ const renderCircles = (props) => {
   return (coords, index) => {
 
     const courseTitle = coords['course'] === undefined ? coords['subject'] : coords['subject'] + ' ' +  coords['course'];
-    const radius = props.toggleSize ? coords['enroll']/circleRadius : circleRadius;
+    const radius = props.toggleSize ? coords['enroll']/props.circleRadius :  (props.radiusConstant*props.radiusConstant) / props.circleRadius;
 
     const circleProps = {
       cx            : roundTenth(props.xScale(coords['studyHoursPerWeek'])),

@@ -36,18 +36,40 @@ svg {
   margin-left: auto;
   margin-right: auto;
 }
+.x-axis-label{
+  color: #4982c3;
+  text-align:center;
+  text-transform: uppercase;
 
+}
+.y-axis-label{
+  color: #4982c3;
+  -webkit-transform-origin: left;
+  -moz-transform-origin: left;
+  -ms-transform-origin: left;
+  -o-transform-origin: left;
+  transform-origin: left;
+  -webkit-transform: rotate(-90deg) translateY(50%);
+  -ms-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  transform: rotate(-90deg) translateX(-105%);
+  width: 500px;
+  text-align: center;
+  text-transform: uppercase;
+}
 #chart-title {
   color: #4982c3;
   padding-top: 20px;
   margin: 0;
   text-align: center;
+
 }
 
 footer {
   border-top: solid 1px #cccccc;
   height: 40px;
   background-color: #fdfdfd;
+  width: 100%;
 }
 
 footer>a {
@@ -59,4 +81,20 @@ footer>a {
 
 footer>a:last-child {
   float: right;
+}
+
+@media(max-width: 480px){
+  footer > a {
+    display: block;
+    text-align: center;
+  }
+  footer > a:last-child {
+    float: none;
+  }
+
+  footer > a:first-child{
+    padding-top: 10px;
+    line-height: 1.5;
+
+  }
 }

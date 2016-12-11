@@ -18,6 +18,7 @@ export default class Axis extends Component {
 
     if(this.props.orient === 'left'){
       axis = d3.axisLeft().ticks(5).scale(this.props.scale);
+      //axis = d3.axisLeft().ticks(5).scale(d3.scaleLinear().range([0, 500]));
       d3.select(axisNode).append('text').attr("class", "y label")
         .attr("text-anchor", "end")
         .attr("y", 0)
