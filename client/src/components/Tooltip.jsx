@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 export default class Tooltip extends Component {
   render(){
-    console.log('re-rendering tooltip with props: ', this.props);
     return(
       <g>
         <text style={this.props.style}>
