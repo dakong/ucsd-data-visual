@@ -12,16 +12,17 @@ const styles = {
 }
 const randomHue = () => 'rgba(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) +',.6)';
 const fontSize = 12;
+
 export default class Chart extends Component {
   constructor(props){
     super(props);
-
     this.state = {
       capeData : null,
       dropDownOptions: [
       ],
       currentSubject: 'all subjects',
       toggleSize: true,
+      toggleLabel: false,
       loaded: false,
       circleRadius: 8,
       radiusConstant: 8,
@@ -32,6 +33,7 @@ export default class Chart extends Component {
     this.returnFromSearch = this.returnFromSearch.bind(this);
     this.selectSubject    = this.selectSubject.bind(this);
     this.toggleSize       = this.toggleSize.bind(this);
+    this.toggleLabel      = this.toggleLabel.bind(this);
     this.zoomCircles      = this.zoomCircles.bind(this);
     this.scaleTooltip     = this.scaleTooltip.bind(this);
   }
@@ -77,6 +79,12 @@ export default class Chart extends Component {
     });
   }
 
+  toggleLabel(event){
+    this.setState({
+      toggleLabel : event.target.checked
+    })
+  }
+
   zoomCircles = (zoomFactor) => {
     const newRadius = (this.state.radiusConstant * zoomFactor);
     this.setState({
@@ -106,7 +114,9 @@ export default class Chart extends Component {
       <div id="chart-container">
         <h1 id="chart-title"> Results for {this.state.currentSubject} </h1>
           <div className='control'>
-            <label><input type="checkbox" onChange={(event)=>this.toggleSize(event)} checked={this.state.toggleSize}/>&nbsp;Show enrollment size</label><br />
+            <label><input type="checkbox" onChange={(event)=>this.toggleSize(event)} checked={this.state.toggleSize}/>&nbsp;Show Enrollment Size</label><br />
+            <label><input type="checkbox" onChange={(event)=>this.toggleLabel(event)} checked={this.state.toggleLabel}/>&nbsp;Show Label</label><br />
+
             <select onChange={(event)=>this.selectSubject(event)}>
               <option value="all" key="0">All Subjects</option>
               {dropDownOptions}
